@@ -29,5 +29,4 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-include(":adaption_common")
 include(":adaption_api")
