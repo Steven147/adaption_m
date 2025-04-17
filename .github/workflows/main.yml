@@ -1,0 +1,53 @@
+name: Kotlin Multiplatform CI/CD
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Build Android
+        run: ./gradlew assembleDebug
+
+      - name: Build iOS
+        run: |
+          sudo xcode-select -s /Applications/Xcode_13.2.1.app
+          ./gradlew linkDebugFrameworkIos
+
+      - name: Build Desktop
+        run: ./gradlew run
+
+      - name: Build Web
+        run: ./gradlew jsBrowserProductionWebpack
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-apk
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: Upload iOS Framework
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-framework
+          path: iosApp/build/bin/ios/debugFramework/*.framework
+
+      - name: Upload Web Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: web-build
+          path: jsApp/build/distributions/    
+
+  
