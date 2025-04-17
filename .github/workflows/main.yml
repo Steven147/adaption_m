@@ -1,4 +1,4 @@
-name: Kotlin Multiplatform CI/CD / Deploy static content to Pages
+name: KMM CI/CD / Deploy to Pages
 
 on:
   push:
@@ -64,6 +64,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
