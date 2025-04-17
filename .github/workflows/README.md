@@ -1,6 +1,10 @@
 # CI / CD help - GitHub action
 
+see action / deployment at:
 [adaption\_m/.github/workflows at master](https://github.com/Steven147/adaption_m/actions)
+
+see web page at:
+- [adaption_m](https://steven147.github.io/adaption_m/)
 
 see workflow at：
 - [adaption\_m/.github/workflows at master](https://github.com/Steven147/adaption_m/tree/master/.github/workflows)
