@@ -61,6 +61,7 @@ jobs:
   # Single deploy job since we're just deploying
   deploy-to-gh-pages:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' # Only deploy on pushes to the master branch
     needs: build-web
     steps:
       - name: Checkout code
