@@ -34,19 +34,19 @@ jobs:
         run: ./gradlew jsBrowserProductionWebpack
 
       - name: Upload Android APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: app/build/outputs/apk/debug/*.apk
 
       - name: Upload iOS Framework
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ios-framework
           path: iosApp/build/bin/ios/debugFramework/*.framework
 
       - name: Upload Web Build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: web-build
           path: jsApp/build/distributions/
