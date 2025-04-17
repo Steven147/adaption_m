@@ -13,11 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: '11'
+          distribution: 'adopt'
 
       - name: Build Android
         run: ./gradlew assembleDebug
@@ -34,19 +34,19 @@ jobs:
         run: ./gradlew jsBrowserProductionWebpack
 
       - name: Upload Android APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: android-apk
           path: app/build/outputs/apk/debug/*.apk
 
       - name: Upload iOS Framework
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: ios-framework
           path: iosApp/build/bin/ios/debugFramework/*.framework
 
       - name: Upload Web Build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: web-build
           path: jsApp/build/distributions/
