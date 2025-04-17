@@ -23,7 +23,7 @@ jobs:
           git config user.email "<>"
       - name: Merge develop to master
         run: |
-          git fetch origin master
           git checkout master
+          git fetch origin master
           git merge develop --no-ff -m "Automatically merge develop into master"
           git push origin master
