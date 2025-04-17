@@ -15,3 +15,7 @@ see project version at：
 
 upload version
 - [actions/upload-artifact](https://github.com/actions/upload-artifact)
+
+kmm doc: [Publish your application | Kotlin Multiplatform Development Documentation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-publish-apps.html)
+
+action doc: [GitHub Actions 入门教程 - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html)
