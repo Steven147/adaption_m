@@ -1,0 +1,32 @@
+name: Merge Develop to Master
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+    # 手动触发
+    inputs:
+      merge:
+        description: 'Trigger merge from develop to master'
+        required: false
+        default: 'true'
+
+jobs:
+  merge-develop-to-master:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+      - name: Set up Git configuration
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      - name: Merge develop to master
+        run: |
+          git fetch origin master
+          git checkout master
+          git merge develop --no-ff -m "Automatically merge develop into master"
+          git push origin master

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 jobs:
   build:
@@ -50,22 +51,3 @@ jobs:
 #        with:
 #          name: web-build
 #          path: jsApp/build/distributions/
-
-#  merge-develop-to-master:
-#    runs-on: ubuntu-latest
-#    needs: build
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#        with:
-#          ref: develop
-#      - name: Set up Git configuration
-#        run: |
-#          git config user.name "GitHub Actions Bot"
-#          git config user.email "<>"
-#      - name: Merge develop to master
-#        run: |
-#          git fetch origin master
-#          git checkout master
-#          git merge develop --no-ff -m "Automatically merge develop into master"
-#          git push origin master
