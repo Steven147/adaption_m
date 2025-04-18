@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
+import androidx.compose.material.Divider
+import androidx.compose.material.Slider
+import androidx.compose.material.Switch
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -33,7 +33,7 @@ import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.ScreenArea.Compani
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.paramsoperator.IScaleTypeParamOperator
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.json.JSONObject
+import kotlinx.serialization.json.encodeToJsonElement
 
 
 @Composable
@@ -43,19 +43,16 @@ fun ParamsControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
 //        Text("Params", modifier = Modifier.padding(16.dp))
 //
 //        HorizontalDivider()
-
+        val jsonElement = Json.encodeToJsonElement(screenSettingsState.value.adaptionParams)
         JsonItemView(
             item = JsonItem(
                 key = "params",
-                value = JSONObject(
-                    gson.toJson(
-                        screenSettingsState.value.adaptionParams
-                    )
-                )
+                value = jsonElement
             )
         )
 
-        HorizontalDivider()
+        Divider()
+
 
         // change unit
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -70,7 +67,7 @@ fun ParamsControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
         }
         VideoRatioUnit(screenSettingsState)
 
-        HorizontalDivider()
+        Divider()
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Use mock padding: ")
@@ -89,7 +86,7 @@ fun ParamsControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
         SliderUnit(screenSettingsState, false)
 
 
-        HorizontalDivider()
+        Divider()
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Use mock scale: ")

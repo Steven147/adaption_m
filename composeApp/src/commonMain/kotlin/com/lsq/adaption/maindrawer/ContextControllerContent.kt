@@ -6,9 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import com.google.gson.GsonBuilder
 import com.lsq.adaption.ScreenSettings
 import com.ss.android.ugc.aweme.JsonItem
 import com.ss.android.ugc.aweme.JsonItemView
@@ -25,15 +23,7 @@ import com.ss.android.ugc.aweme.videoadaption.adaptioncontext.VideoAdaptionManag
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.json.JSONObject
-
-val gson by lazy {
-    GsonBuilder()
-        .setPrettyPrinting()
-        .serializeNulls()
-        .disableHtmlEscaping()
-        .create()
-}
+import kotlinx.serialization.json.encodeToJsonElement
 
 @Composable
 fun ContextControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
@@ -43,14 +33,12 @@ fun ContextControllerContent(screenSettingsState: MutableState<ScreenSettings>) 
     ){
         InputTextField(
             text = remember { mutableStateOf(
-                gson.toJson(screenSettingsState.value.adaptionContext)
-//                Json.encodeToString(screenSettingsState.value.adaptionContext)
+                Json.encodeToString(screenSettingsState.value.adaptionContext)
             ) },
             end = {
                 screenSettingsState.value = screenSettingsState.value.copy(
-                    adaptionContext =
-                        gson.fromJson(it, VideoAdaptionManagerContext::class.java)
-//                        Json.decodeFromString<MockAdaptionContext>(it)
+                    adaptionContext = Json.decodeFromString<VideoAdaptionManagerContext>(it)
+//                        gson.fromJson(it, VideoAdaptionManagerContext::class.java)
                 )
             }
         )
@@ -60,11 +48,7 @@ fun ContextControllerContent(screenSettingsState: MutableState<ScreenSettings>) 
         JsonItemView(
             item = JsonItem(
                 key = "context",
-                value = JSONObject(
-                    gson.toJson(
-                        screenSettingsState.value.adaptionContext
-                    )
-                )
+                value = Json.encodeToJsonElement(screenSettingsState.value.adaptionContext)
             )
         )
     }
@@ -80,11 +64,7 @@ fun ResultControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
         JsonItemView(
             item = JsonItem(
                 key = "result",
-                value = JSONObject(
-                    gson.toJson(
-                        screenSettingsState.value.adaptionResult
-                    )
-                )
+                value = Json.encodeToJsonElement(screenSettingsState.value.adaptionResult)
             )
         )
     }
