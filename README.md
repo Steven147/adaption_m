@@ -67,4 +67,16 @@ manager层context包含strategy工厂factory，factory中会组装各个strategy
 如果你在使用过程中遇到任何问题，请在 [GitHub](https://github.com/JetBrains/compose-multiplatform/issues) 上提交问题报告。
 
 ## 启动 Web 应用程序
-你可以通过运行 `:composeApp:wasmJsBrowserDevelopmentRun` Gradle 任务来打开 Web 应用程序。sk.
+你可以通过运行 `:composeApp:wasmJsBrowserDevelopmentRun` Gradle 任务来打开 Web 应用程序。
+
+## github / gradle链接问题
+
+ide proxy 设置。
+
+```shell
+git config --global -l
+user.name=linshaoqin
+user.email=857119585@qq.com
+http.proxy=http://127.0.0.1:4780
+https.proxy=https://127.0.0.1:4780
+```
