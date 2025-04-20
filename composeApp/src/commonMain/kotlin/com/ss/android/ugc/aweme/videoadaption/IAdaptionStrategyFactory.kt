@@ -18,13 +18,3 @@ interface IAdaptionStrategyFactory {
     fun getAdaptionStrategy(context: VideoAdaptionManagerContext, params: VideoAdaptionParams):
         AbstractAdaptionStrategy?
 }
-
-// 创建 SerializersModule 并注册序列化器
-val module = SerializersModule {
-    polymorphic(IAdaptionStrategyFactory::class) {
-        subclass(BaseAdaptionStrategyFactory::class, BaseAdaptionStrategyFactory.serializer())
-    }
-    polymorphic(IVideoAdaptionParamsOperator::class) {
-        subclass(BaseAdaptionParamOperator::class, BaseAdaptionParamOperator.serializer())
-    }
-}

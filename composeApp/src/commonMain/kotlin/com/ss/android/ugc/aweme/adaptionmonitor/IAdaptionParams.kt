@@ -5,4 +5,4 @@ package com.ss.android.ugc.aweme.adaptionmonitor
  * @author linshaoqin@bytedance.com
  * @interface need @Keep when implement params class
  */
-interface IAdaptionParams
+interface IAdaptionParams: IAdaptionData

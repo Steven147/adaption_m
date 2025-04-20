@@ -13,6 +13,23 @@ permissions:
   id-token: write
 
 jobs:
+  test-common:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Test Common
+        run: ./gradlew composeApp:cleanDesktopTest :composeApp:desktopTest --tests "TestDelegate"
+
   build-android:
     runs-on: macos-latest
 

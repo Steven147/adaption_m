@@ -3,12 +3,14 @@ package com.ss.android.ugc.aweme.videoadaption.adaptionparams.smartparams
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionParams
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionResult
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.resultoperator.IVideoAdaptionResultOperator
+import kotlinx.serialization.Serializable
 
 
 /**
  * Created by linshaoqin on 2024/3/22
  * @author linshaoqin@bytedance.com
  */
+@Serializable
 data class AdaptionRegularResultOperator(
     /**
      * input value

@@ -9,12 +9,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,7 +27,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -56,8 +53,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -68,12 +63,14 @@ import com.lsq.adaption.ui.PagerTabView
 import com.ss.android.ugc.aweme.adaptionmonitor.AdaptionDisplayUtil.getScaleBy9
 import com.ss.android.ugc.aweme.adaptionmonitor.AdaptionDisplayUtil.round1
 import com.ss.android.ugc.aweme.adaptionmonitor.AdaptionDisplayUtil.round3
+import com.ss.android.ugc.aweme.videoadaption.AdaptionMockDataUtil
 import com.ss.android.ugc.aweme.videoadaption.AdaptionMockDataUtil.getMockAdaptionParamsOperator
 import com.ss.android.ugc.aweme.videoadaption.BaseAdaptionParamOperator
 import com.ss.android.ugc.aweme.videoadaption.BaseAdaptionStrategyFactory
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.AdaptionScaleType
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.FeedScreenContext
 import com.ss.android.ugc.aweme.videoadaption.adaptionmanager.VideoAdaptionManager
+import com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionResult
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.resultoperator.MultiContainerThresholdResultOperator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -228,9 +225,6 @@ private fun StaticVerticalPages(
     screenSettingsState: MutableState<ScreenSettings>,
     paddingValues: PaddingValues,
 ) {
-
-    val baseAdaptionStrategyFactory = screenSettingsState.value.adaptionContext.strategyFactory
-            as? BaseAdaptionStrategyFactory ?: return
     val drawableResources = listOf(Res.drawable.example169, Res.drawable.example916, Res.drawable.example11)
     val scalesList = listOf(16f/9, 9f/16, 1f/1)
     val pagerState = rememberPagerState(0, 0F) { drawableResources.size }
@@ -254,47 +248,10 @@ private fun StaticVerticalPages(
                 videoRatio = scalesList[it]
             }
 
-            val feedScreenContext: FeedScreenContext
-            if (settings.mockPaddingEnable) {
-                feedScreenContext = baseAdaptionStrategyFactory.feedScreenContext.copy(
-                    topTypeList = listOf(settings.screenAdaptionTopType),
-                    bottomTypeList = listOf(settings.screenAdaptionBottomType)
-                )
-            } else {
-                feedScreenContext = baseAdaptionStrategyFactory.feedScreenContext
-            }
-
-            val adaptionParamsOperator = screenSettingsState.value.adaptionParams.paramsOperator
-                    as? BaseAdaptionParamOperator ?: getMockAdaptionParamsOperator()
-
-            val forceScaleType: AdaptionScaleType?
-            if (settings.mockScaleEnable) {
-                forceScaleType = settings.mockScaleMode.toAdaptionScaleType()
-            } else {
-                forceScaleType = adaptionParamsOperator.forceScaleType
-            }
-
-            val adaptionParams = screenSettingsState.value.adaptionParams.copy(
-                containerWidth = feedScreenContext.screenWidth.toInt(),
-                containerHeight = feedScreenContext.screenHeight.toInt(),
-                videoWidth = 1000,
-                videoHeight = (videoRatio * 1000).toInt(),
-            )
-
-            val videoAdaptionManager = VideoAdaptionManager("mock_display", settings.adaptionContext)
-            videoAdaptionManager.doAdaption(
-                adaptionParams.copy(
-                    paramsOperator = adaptionParamsOperator.copy(
-                        forceScaleType = forceScaleType
-                    )
-                )
-            )
-
-            val result = videoAdaptionManager.getAdaptionResult() ?: return@VerticalPager
-            screenSettingsState.value = screenSettingsState.value.copy(
-                adaptionParams = adaptionParams,
-                adaptionResult = result
-            )
+            val result = AdaptionMockDataUtil.getAdaptionResult(
+                screenSettingsState,
+                videoRatio
+            ) ?: return@VerticalPager
             val operator = result.resultOperator as? MultiContainerThresholdResultOperator
             val scale = operator?.adaptionScaleType?.toContentScale() ?: ContentScale.None
             val padding = operator?.paddingValues?.toPaddingValues(mockScreenScale) ?: PaddingValues()

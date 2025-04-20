@@ -75,6 +75,12 @@ ide proxy 设置。
 
 ```shell
 git config --global -l
+```
+```shell
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+```
+```
 user.name=linshaoqin
 user.email=857119585@qq.com
 http.proxy=http://127.0.0.1:4780

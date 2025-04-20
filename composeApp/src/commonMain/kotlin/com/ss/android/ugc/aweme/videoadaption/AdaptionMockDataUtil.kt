@@ -1,5 +1,8 @@
 package com.ss.android.ugc.aweme.videoadaption
 
+import androidx.compose.runtime.MutableState
+import com.lsq.adaption.ScreenSettings
+import com.lsq.adaption.mockscreen.toAdaptionScaleType
 import com.ss.android.ugc.aweme.videoadaption.adaptioncontext.FeedMultiContainerThresholdStrategyContext
 import com.ss.android.ugc.aweme.videoadaption.adaptioncontext.IAdaptionStrategyContext
 import com.ss.android.ugc.aweme.videoadaption.adaptioncontext.MultiContainerThresholdHandlerContext
@@ -10,7 +13,9 @@ import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.AdaptionScaleType
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.FeedScreenContext
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.MultiContainerThresholdAdaptionHandler
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.ThresholdAdaptionHandler
+import com.ss.android.ugc.aweme.videoadaption.adaptionmanager.VideoAdaptionManager
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionParams
+import com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionResult
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.paramsoperator.IContainerThresholdParamsOperator
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.paramsoperator.IScaleTypeParamOperator
 import com.ss.android.ugc.aweme.videoadaption.adaptionstrategy.AbstractAdaptionStrategy
@@ -60,6 +65,58 @@ object AdaptionMockDataUtil {
             containerThresholds = containerThresholds
         )
     }
+
+    fun getAdaptionResult(
+        screenSettingsState: MutableState<ScreenSettings>,
+        videoRatio: Float
+    ): VideoAdaptionResult? {
+        val settings = screenSettingsState.value
+        val baseAdaptionStrategyFactory = screenSettingsState.value.adaptionContext.strategyFactory
+                as? BaseAdaptionStrategyFactory ?: return null
+        val feedScreenContext: FeedScreenContext
+        if (settings.mockPaddingEnable) {
+            feedScreenContext = baseAdaptionStrategyFactory.feedScreenContext.copy(
+                topTypeList = listOf(settings.screenAdaptionTopType),
+                bottomTypeList = listOf(settings.screenAdaptionBottomType)
+            )
+        } else {
+            feedScreenContext = baseAdaptionStrategyFactory.feedScreenContext
+        }
+
+        val adaptionParamsOperator = screenSettingsState.value.adaptionParams.paramsOperator
+                as? BaseAdaptionParamOperator ?: getMockAdaptionParamsOperator()
+
+        val forceScaleType: AdaptionScaleType?
+        if (settings.mockScaleEnable) {
+            forceScaleType = settings.mockScaleMode.toAdaptionScaleType()
+        } else {
+            forceScaleType = adaptionParamsOperator.forceScaleType
+        }
+
+        val adaptionParams = screenSettingsState.value.adaptionParams.copy(
+            containerWidth = feedScreenContext.screenWidth.toInt(),
+            containerHeight = feedScreenContext.screenHeight.toInt(),
+            videoWidth = 1000,
+            videoHeight = (videoRatio * 1000).toInt(),
+        )
+
+        val videoAdaptionManager = VideoAdaptionManager("mock_display", settings.adaptionContext)
+        videoAdaptionManager.doAdaption(
+            adaptionParams.copy(
+                paramsOperator = adaptionParamsOperator.copy(
+                    forceScaleType = forceScaleType
+                )
+            )
+        )
+
+        val result = videoAdaptionManager.getAdaptionResult()
+        screenSettingsState.value = screenSettingsState.value.copy(
+            adaptionParams = adaptionParams,
+            adaptionResult = result ?: screenSettingsState.value.adaptionResult
+        )
+        return result
+    }
+
 }
 
 //

@@ -21,15 +21,14 @@ import com.lsq.adaption.ScreenSettings
 import com.ss.android.ugc.aweme.JsonItem
 import com.ss.android.ugc.aweme.JsonItemView
 import com.ss.android.ugc.aweme.adaptionmonitor.AdaptionDisplayUtil.getScaleBy9
+import com.ss.android.ugc.aweme.adaptionmonitor.DataJsonDelegate
 import com.ss.android.ugc.aweme.videoadaption.BaseAdaptionStrategyFactory
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.ScreenArea
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.ScreenArea.Companion.getBottomLineName
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.ScreenArea.Companion.getTopLineName
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.ScreenArea.Companion.toCount
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.ScreenArea.Companion.toType
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
-
 
 @Composable
 fun ParamsControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
@@ -38,11 +37,10 @@ fun ParamsControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
 //        Text("Params", modifier = Modifier.padding(16.dp))
 //
 //        HorizontalDivider()
-        val jsonElement = localJson.encodeToJsonElement(screenSettingsState.value.adaptionParams)
         JsonItemView(
             item = JsonItem(
                 key = "params",
-                value = jsonElement
+                value = DataJsonDelegate.encodeToJsonElement(screenSettingsState.value.adaptionParams)
             )
         )
 

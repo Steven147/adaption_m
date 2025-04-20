@@ -3,6 +3,7 @@ package com.ss.android.ugc.aweme.videoadaption.adaptionparams.resultoperator
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.AdaptionScaleType
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.AlignType
 import com.ss.android.ugc.aweme.videoadaption.adaptionparams.AdaptionPaddingValues
+import kotlinx.serialization.Serializable
 
 /**
  * @author linshaoqin
@@ -35,6 +36,7 @@ interface IAdjustContainerResultOperator: IVideoAdaptionResultOperator {
 }
 
 //
+@Serializable
 data class MultiContainerThresholdResultOperator(
     override val topType: Int,
     override val bottomType: Int,
@@ -50,6 +52,7 @@ data class MultiContainerThresholdResultOperator(
 ): IMultiContainerThresholdResultOperator, IThresholdAdaptionResultOperator
 
 //
+@Serializable
 data class MultiContainerThresholdResultInnerOperator(
     override val topType: Int,
     override val bottomType: Int,

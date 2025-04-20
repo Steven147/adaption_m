@@ -2,6 +2,7 @@ package com.ss.android.ugc.aweme.videoadaption.adaptionparams.resultoperator
 
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.AdaptionScaleType
 import com.ss.android.ugc.aweme.videoadaption.adaptionhandler.AlignType
+import kotlinx.serialization.Serializable
 
 /**
  * @author linshaoqin
@@ -17,6 +18,7 @@ interface IThresholdAdaptionResultOperator: IVideoAdaptionResultOperator {
 /**
  *
  */
+@Serializable
 data class ThresholdAdaptionResultOperator(
     override val adaptionScaleType: AdaptionScaleType,
     override val alignType: AlignType,

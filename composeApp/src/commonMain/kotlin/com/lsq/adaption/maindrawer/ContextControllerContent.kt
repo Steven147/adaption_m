@@ -10,8 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -19,19 +17,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.lsq.adaption.ScreenSettings
 import com.ss.android.ugc.aweme.JsonItem
 import com.ss.android.ugc.aweme.JsonItemView
+import com.ss.android.ugc.aweme.adaptionmonitor.DataJsonDelegate
 import com.ss.android.ugc.aweme.videoadaption.AdaptionMockDataUtil.getMockAdaptionManagerContext
 import com.ss.android.ugc.aweme.videoadaption.adaptioncontext.VideoAdaptionManagerContext
-import com.ss.android.ugc.aweme.videoadaption.module
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
-
-
-val localJson = Json {
-    prettyPrint = true
-    serializersModule = module
-}
 
 @Composable
 fun ContextControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
@@ -40,20 +28,11 @@ fun ContextControllerContent(screenSettingsState: MutableState<ScreenSettings>) 
         modifier = Modifier.fillMaxSize().verticalScroll(scrollState)
     ){
         TextField(
-            value = try {
-                localJson.encodeToString(screenSettingsState.value.adaptionContext)
-            } catch (t: Throwable) {
-                println(t.toString())
-                ""
-            },
+            value = DataJsonDelegate.encodeToString(screenSettingsState.value.adaptionContext),
             onValueChange = {
                 screenSettingsState.value = screenSettingsState.value.copy(
-                    adaptionContext = try {
-                        localJson.decodeFromString<VideoAdaptionManagerContext>(it)
-                    } catch (t: Throwable) {
-                        println(t.toString())
-                        getMockAdaptionManagerContext()
-                    }
+                    adaptionContext = DataJsonDelegate.decodeFromString<VideoAdaptionManagerContext>(it)
+                        ?: getMockAdaptionManagerContext()
                 )
             }
         )
@@ -64,12 +43,7 @@ fun ContextControllerContent(screenSettingsState: MutableState<ScreenSettings>) 
         JsonItemView(
             item = JsonItem(
                 key = "context",
-                value =  try {
-                    localJson.encodeToJsonElement(screenSettingsState.value.adaptionContext)
-                } catch (t: Throwable) {
-                    println(t.toString())
-                    null
-                }
+                value = DataJsonDelegate.encodeToJsonElement(screenSettingsState.value.adaptionContext)
             )
         )
     }
@@ -85,7 +59,7 @@ fun ResultControllerContent(screenSettingsState: MutableState<ScreenSettings>) {
         JsonItemView(
             item = JsonItem(
                 key = "result",
-                value = localJson.encodeToJsonElement(screenSettingsState.value.adaptionResult)
+                value = DataJsonDelegate.encodeToJsonElement(screenSettingsState.value.adaptionResult)
             )
         )
     }
