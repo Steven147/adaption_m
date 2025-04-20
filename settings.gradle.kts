@@ -3,6 +3,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
+        maven(url = "https://maven.aliyun.com/repository/public/") // https://developer.aliyun.com/mvn/guide
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
@@ -17,6 +18,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
+        maven(url = "https://maven.aliyun.com/repository/public/")
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
