@@ -44,21 +44,39 @@
 manager层context包含strategy工厂factory，factory中会组装各个strategy的context
 
 ---
-This is a Kotlin Multiplatform project targeting Android, Web, Desktop.
+# 项目说明
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+这是一个面向 Android、Web 和桌面端的 Kotlin 多平台项目。
 
+* `/composeApp` 目录用于存放可在 Compose 多平台应用程序间共享的代码。
+  该目录包含多个子文件夹：
+  - `commonMain` 文件夹用于存放适用于所有目标平台的通用代码。
+  - 其他文件夹则用于存放仅会为文件夹名称所指示的平台编译的 Kotlin 代码。
+    例如，若你想在 Kotlin 应用的 iOS 部分使用苹果的 CoreCrypto 库，
+    那么 `iosMain` 就是存放此类调用代码的合适文件夹。
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## 学习资源
+了解更多关于：
+- [Kotlin 多平台](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
+- [Compose 多平台](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform)
+- [Kotlin/Wasm](https://kotl.in/wasm/)
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [GitHub](https://github.com/JetBrains/compose-multiplatform/issues).
+## 反馈与问题报告
+我们非常欢迎你在公共 Slack 频道 [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web) 分享你对 Compose/Web 和 Kotlin/Wasm 的反馈。
 
-You can open the web application by running the `:composeApp:wasmJsBrowserDevelopmentRun` Gradle task.
+如果你在使用过程中遇到任何问题，请在 [GitHub](https://github.com/JetBrains/compose-multiplatform/issues) 上提交问题报告。
+
+## 启动 Web 应用程序
+你可以通过运行 `:composeApp:wasmJsBrowserDevelopmentRun` Gradle 任务来打开 Web 应用程序。
+
+## github / gradle链接问题
+
+ide proxy 设置。
+
+```shell
+git config --global -l
+user.name=linshaoqin
+user.email=857119585@qq.com
+http.proxy=http://127.0.0.1:4780
+https.proxy=https://127.0.0.1:4780
+```
