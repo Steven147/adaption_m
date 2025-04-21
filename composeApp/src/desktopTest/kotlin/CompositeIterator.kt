@@ -1,17 +1,19 @@
-package com.lsq
-
 import java.util.Stack
 
 
 fun main() {
 
-    val subMenu = Menu("Sub menu", arrayListOf(
-        MenuItem("sub item 1"), MenuItem("sub item 2")
-    ))
+    val subMenu = Menu(
+        "Sub menu", arrayListOf(
+            MenuItem("sub item 1"), MenuItem("sub item 2")
+        )
+    )
 
-    val menu = Menu("All menu", arrayListOf(
-        MenuItem("item 1"), subMenu, MenuItem("item 3")
-    ))
+    val menu = Menu(
+        "All menu", arrayListOf(
+            MenuItem("item 1"), subMenu, MenuItem("item 3")
+        )
+    )
 
     val iterator = menu.createIterator()
     while (iterator.hasNext()) {
