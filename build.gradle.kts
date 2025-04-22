@@ -8,5 +8,5 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.kotlin.serialization) apply true
-    alias(libs.plugins.jetbrains.kotlin.jvm) apply false // 应用 kotlinx.serialization 插件
+    alias(libs.plugins.kotlinJvm) apply false
 }
