@@ -19,7 +19,18 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
+
     jvm("desktop")
     
     @OptIn(ExperimentalWasmDsl::class)
@@ -64,6 +75,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(projects.shared)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -103,9 +115,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":adaption_api"))
     debugImplementation(compose.uiTooling)
-    implementation(libs.androidx.material3.android)
 }
 
 compose.desktop {

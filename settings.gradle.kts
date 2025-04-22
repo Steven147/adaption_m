@@ -32,3 +32,5 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":adaption_api")
+include(":server")
+include(":shared")

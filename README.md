@@ -29,7 +29,7 @@
 注意，初始化的时机中，manager早于strategy早于handler，且strategy和handler的时机可能延迟到适配执行前。
 适配执行时，manager执行中，会筛选并选定第一个符合条件【matchStrategy】的strategy，而strategy中包含了对应多个handler的执行。
 
-而适配过程中的**数据**，区分为了context、params、result三类，其中context【IAdaptionContext】是和节点绑定的上下文输入，params【IAdaptionParams】是和每次适配行为相关的适配参数输入，result【IAdaptionResult】则代表着适配结果。
+而适配过程中的**数据【IAdaptionData】**，区分为了context、params、result三类，其中context【IAdaptionContext】是和节点绑定的上下文输入，params【IAdaptionParams】是和每次适配行为相关的适配参数输入，result【IAdaptionResult】则代表着适配结果。
 
 ## 适配逻辑接入
 
@@ -44,7 +44,7 @@
 manager层context包含strategy工厂factory，factory中会组装各个strategy的context
 
 ---
-# 项目说明
+# KMM 项目说明
 
 这是一个面向 Android、Web 和桌面端的 Kotlin 多平台项目。
 
@@ -60,6 +60,7 @@ manager层context包含strategy工厂factory，factory中会组装各个strategy
 - [Kotlin 多平台](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
 - [Compose 多平台](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform)
 - [Kotlin/Wasm](https://kotl.in/wasm/)
+- [创建和配置客户端 |Ktor 文档](https://ktor.io/docs/client-create-and-configure.html)
 
 ## 反馈与问题报告
 我们非常欢迎你在公共 Slack 频道 [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web) 分享你对 Compose/Web 和 Kotlin/Wasm 的反馈。
@@ -85,4 +86,65 @@ user.name=linshaoqin
 user.email=857119585@qq.com
 http.proxy=http://127.0.0.1:4780
 https.proxy=https://127.0.0.1:4780
+```
+
+# CI / CD help - GitHub action
+
+see action / deployment at:
+[adaption\_m/.github/workflows at master](https://github.com/Steven147/adaption_m/actions)
+
+see web page at:
+- [adaption_m](https://steven147.github.io/adaption_m/)
+
+see workflow at：
+- [adaption\_m/.github/workflows at master](https://github.com/Steven147/adaption_m/tree/master/.github/workflows)
+
+see project version at：
+- [adaption\_m/composeApp/build.gradle.kts at master](https://github.com/Steven147/adaption_m/blob/master/composeApp/build.gradle.kts)
+- [adaption\_m/adaption\_api/build.gradle.kts at master](https://github.com/Steven147/adaption_m/blob/master/adaption_api/build.gradle.kts
+
+upload version
+- [actions/upload-artifact](https://github.com/actions/upload-artifact)
+
+kmm doc: [Publish your application | Kotlin Multiplatform Development Documentation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-publish-apps.html)
+
+action doc: [GitHub Actions 入门教程 - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html)
+
+## server app
+
+https://console.volcengine.com/ecs/
+
+https://github.com/wnlen/clash-for-linux
+
+http://casaos.local:9090/ui
+
+
+```conf
+sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
+
+
+[Service]
+Environment="HTTP_PROXY=http://127.0.0.1:7890/"
+Environment="HTTPS_PROXY=http://127.0.0.1:7890/"
+Environment="NO_PROXY=localhost,127.0.0.1"
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+docker pull steven147/adaption-server
+
+[Creating fat JARs using the Ktor Gradle plugin | Ktor Documentation](https://ktor.io/docs/server-fatjar.html#build)
+
+```shell
+./gradlew buildFatJar
+ls ./server/build/libs/
+ls ./server/build/
+./gradlew buildImage
+export DOCKER_HUB_USERNAME=steven147
+export DOCKER_HUB_PASSWORD=${{ secrets.DOCKER_HUB_PASSWORD }} # refer to https://github.com/Steven147/adaption_m/settings/secrets/actions
+
+./gradlew publishImage # see https://hub.docker.com/repositories/steven147
+docker load < ./server/build/jib-image.tar
+docker image ls
 ```
