@@ -1,5 +1,12 @@
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import com.lsq.adaption.ScreenSettings
 import com.ss.android.ugc.aweme.adaptionmonitor.DataJsonDelegate
 import com.ss.android.ugc.aweme.adaptionmonitor.IAdaptionData
+import com.ss.android.ugc.aweme.videoadaption.AdaptionMockDataUtil
+import com.ss.android.ugc.aweme.videoadaption.adaptioncontext.VideoAdaptionManagerContext
+import com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionParams
+import com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionResult
 import kotlin.test.Test
 import org.reflections.Reflections
 import kotlin.reflect.cast
@@ -49,15 +56,14 @@ class TestDelegate {
 
     @Test
     fun testDataJsonDelegate() {
-        DataJsonDelegate.isTest = true
-
-        val objs = DataJsonDelegate.getTestObjList()
-
-        // 调用实例的方法
-        for (instance in objs) {
-            val string = DataJsonDelegate.apply { isTest = true }.encodeToString(instance)
-            println("encodeToString $string")
+        val settings: MutableState<ScreenSettings> = mutableStateOf(ScreenSettings()).apply {
+            // todo only check with one adaption situation, use more input value
+            AdaptionMockDataUtil.getAdaptionResult(this, this.value.videoRatio)
         }
+        DataJsonDelegate.isTest = true
+        DataJsonDelegate.encodeToString(settings.value.adaptionResult)
+        DataJsonDelegate.encodeToString(settings.value.adaptionParams)
+        DataJsonDelegate.encodeToString(settings.value.adaptionContext)
     }
 
     // todo test params input invalid

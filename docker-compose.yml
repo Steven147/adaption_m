@@ -1,0 +1,11 @@
+version: '3'
+services:
+  adaption-server:
+    image: steven147/adaption-server:0.0.5
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/data 
+volumes:
+  data:
+    external: true

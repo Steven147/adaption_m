@@ -62,20 +62,6 @@ object DataJsonDelegate {
         }
     }
 
-    private val settings: MutableState<ScreenSettings> = mutableStateOf(ScreenSettings()).apply {
-        // todo only check with one adaption situation, use more input value
-        AdaptionMockDataUtil.getAdaptionResult(this, this.value.videoRatio)
-    }
-
-    @Deprecated("use delegate instead, public by inline function")
-    val testClazzList = mapOf(
-        VideoAdaptionResult::class to { settings.value.adaptionResult },
-        VideoAdaptionParams::class to { settings.value.adaptionParams },
-        VideoAdaptionManagerContext::class to { settings.value.adaptionContext }
-    )
-
-    fun getTestObjList() = testClazzList.map { it.value.invoke() }
-
     inline fun <reified T: IAdaptionData> encodeToJsonElement(value: T): JsonElement? = try {
         checkClazz<T>()
         localJson.encodeToJsonElement(value)
@@ -101,9 +87,9 @@ object DataJsonDelegate {
     }
 
     inline fun <reified T: IAdaptionData> checkClazz() {
-        if (T::class !in testClazzList.keys)  {
-            IllegalArgumentException(T::class.toString()).logThrowable()
-        }
+//        if (T::class !in testClazzList.keys)  {
+//            IllegalArgumentException(T::class.toString()).logThrowable()
+//        }
     }
 
     fun Throwable.logThrowable() {

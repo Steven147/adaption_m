@@ -112,16 +112,28 @@ action doc: [GitHub Actions 入门教程 - 阮一峰的网络日志](https://www
 
 ## server app
 
+*public ecs for action ssh login*
+
 https://console.volcengine.com/ecs/
+
+*enable port in security group*
+
+https://console.volcengine.com/vpc/region:vpc+cn-shanghai/securityGroup/
+
+*install docker*
+
+[Debian | Docker Docs](https://docs.docker.com/engine/install/debian/)
+
+*add proxy to docker*
 
 https://github.com/wnlen/clash-for-linux
 
-http://casaos.local:9090/ui
+see log in `/clash-for-linux/logs/clash.log`
 
+docker login -u <your_username> -p <your_access_token>
 
 ```conf
 sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
-
 
 [Service]
 Environment="HTTP_PROXY=http://127.0.0.1:7890/"
@@ -132,9 +144,32 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
-docker pull steven147/adaption-server
+*build and publish*
 
 [Creating fat JARs using the Ktor Gradle plugin | Ktor Documentation](https://ktor.io/docs/server-fatjar.html#build)
+
+```yml
+- name: Build Server App Jar
+  run: ./gradlew buildFatJar
+
+- name: Build Docker Image
+  run: ./gradlew buildImage
+
+- name: Publish Docker Image
+  run: ./gradlew publishImage
+
+- name: Deploy to server
+  uses: appleboy/ssh-action@v0.1.4
+  with:
+    host: ${{ secrets.SERVER_HOST }}
+    username: ${{ secrets.SERVER_USERNAME }}
+    password: ${{ secrets.SERVER_PASSWORD }}
+    script: |
+      docker steven147/adaption-server
+      docker stop $(docker ps -aqf "ancestor=steven147/adaption-server") || true
+      docker rm $(docker ps -aqf "ancestor=steven147/adaption-server") || true
+      docker run -d -p 5000:5000 steven147/adaption-server
+```
 
 ```shell
 ./gradlew buildFatJar
@@ -143,7 +178,6 @@ ls ./server/build/
 ./gradlew buildImage
 export DOCKER_HUB_USERNAME=steven147
 export DOCKER_HUB_PASSWORD=${{ secrets.DOCKER_HUB_PASSWORD }} # refer to https://github.com/Steven147/adaption_m/settings/secrets/actions
-
 ./gradlew publishImage # see https://hub.docker.com/repositories/steven147
 docker load < ./server/build/jib-image.tar
 docker image ls
