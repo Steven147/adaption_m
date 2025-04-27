@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -41,7 +42,25 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.coroutines.core)
+            // filekit
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
+            implementation(libs.filekit.coil)
+            // client
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.content.negotiation)
+            // serialization
+            implementation(libs.ktor.serialization.kotlinx.json)
+        }
+        jvmMain.dependencies {
+            implementation(libs.poi.ooxml)
+            implementation(libs.jsoup)
+            implementation(libs.selenium.java)
+            implementation(libs.webdrivermanager)
         }
     }
 }

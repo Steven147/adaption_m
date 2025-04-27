@@ -5,7 +5,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./data:/data 
+      - ./server-data:/server-data 
 volumes:
-  data:
+  server-data:
     external: true

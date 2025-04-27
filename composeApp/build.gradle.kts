@@ -59,7 +59,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -72,10 +72,17 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.gson)
             implementation(libs.androidx.navigation.compose)
-            implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared)
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
+            implementation(libs.filekit.coil)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -83,6 +90,7 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlin.test.junit)
             implementation(libs.reflections)
+            implementation("ch.qos.logback:logback-classic:1.4.14")
         }
     }
 }

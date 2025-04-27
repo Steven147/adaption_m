@@ -44,15 +44,15 @@ class ConcurrencyTest {
 
 
     @Test
-    fun main2() = runBlocking {
+    fun main2() = runBlocking { // in Test Worker thread
         val manager = CoroutineTokenManager()
         val coroutineCount = 5
         val jobs = mutableListOf<Job>()
-        withContext(Dispatchers.Default) {
+        withContext(Dispatchers.Default) { // in Default dispatcher shared thread pool
             repeat(coroutineCount) { index ->
                 println("${Thread.currentThread().name} launching coroutine $index.")
                 delay(10)
-                val job = launch {
+                val job = launch { // 每个由 launch 创建的协程都会被分配到 Dispatchers.Default 线程池中的某个线程上执行
                     println("Coroutine-$index is starting.")
                     val result = manager.updateToken()
                     println("Coroutine-$index got result: $result")
@@ -113,7 +113,7 @@ open class TokenManager {
         synchronized(lock) {
             while (isGettingToken) {
                 println("${Thread.currentThread().name} is waiting for getting token")
-                lock.wait()
+                lock.wait() // 当一个线程调用 wait() 进入等待状态后，需要其他线程调用 notify() 或 notifyAll() 来唤醒它，否则线程会一直等待下去。
                 println("${Thread.currentThread().name} finish waiting")
             }
             println("${Thread.currentThread().name} into get token")

@@ -1,0 +1,30 @@
+name: Run Server Deployment
+
+on:
+  workflow_dispatch:
+    # 手动触发
+    inputs:
+      deploy:
+        description: 'Trigger run server deployment'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            docker steven147/adaption-server
+            docker stop $(docker ps -aqf "ancestor=steven147/adaption-server") || true
+            docker rm $(docker ps -aqf "ancestor=steven147/adaption-server") || true
+            docker run -d -p 5000:5000 steven147/adaption-server
