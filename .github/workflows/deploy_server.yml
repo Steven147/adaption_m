@@ -1,0 +1,38 @@
+name: Deploy [Docker]
+
+on:
+  push:
+    branches:
+      - develop*
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy-to-docker:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_HUB_USERNAME: steven147
+      DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Build Server App Jar
+        run: ./gradlew buildFatJar
+
+      - name: Build Docker Image
+        run: ./gradlew buildImage
+
+      - name: Publish Docker Image
+        run: ./gradlew publishImage

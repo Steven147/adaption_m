@@ -1,15 +1,8 @@
 package org.example.project
 
-import android.os.Build
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.openFileSaver
 import io.github.vinceglb.filekit.write
-
-class AndroidPlatform : Platform {
-    override val name: String = "Android ${Build.VERSION.SDK_INT}"
-}
-
-actual fun getPlatform(): Platform = AndroidPlatform()
 
 actual suspend fun openFileSaver(bytes: ByteArray, fileName: String) {
     val file = FileKit.openFileSaver(suggestedName = fileName)

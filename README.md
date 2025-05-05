@@ -88,6 +88,12 @@ http.proxy=http://127.0.0.1:4780
 https.proxy=https://127.0.0.1:4780
 ```
 
+# Build and Test and Deploy
+
+```shell
+gtar --directory=/Users/lsq/nas_zmb/碰碰 --transform='s,^,data/,' -zcvf ~/test_files.tar.gz .
+```
+
 # CI / CD help - GitHub action
 
 see action / deployment at:
@@ -113,6 +119,16 @@ action doc: [GitHub Actions 入门教程 - 阮一峰的网络日志](https://www
 ## server app
 
 *public ecs for action ssh login*
+
+/server 是一个基于 Ktor 框架构建的服务器项目。以下是该目录主要功能的详细分析：
+
+### 1. 项目构建配置
+文件 `build.gradle.kts` 定义了项目的构建脚本，其中包含以下关键配置：
+
+- 插件使用 ：使用了 Kotlin JVM、Ktor 等插件，以及 GraalVM 原生构建插件。
+- 应用配置 ：指定了应用的主类和默认 JVM 参数。
+- 依赖管理 ：定义了项目的依赖，包括共享模块、日志库和 Ktor 服务器组件。
+- 打包和 Docker 配置 ：支持生成胖 JAR 文件，并可以将应用打包成 Docker 镜像，同时支持推送到 Docker Hub。
 
 https://console.volcengine.com/ecs/
 
@@ -173,6 +189,7 @@ sudo systemctl restart docker
 
 ```shell
 ./gradlew buildFatJar
+./gradlew runFatJar
 ls ./server/build/libs/
 ls ./server/build/
 ./gradlew buildImage
